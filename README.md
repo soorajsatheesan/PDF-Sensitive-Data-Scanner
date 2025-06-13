@@ -16,7 +16,6 @@ A powerful and efficient data scanning tool built with Python for analyzing and 
 - [Examples](#examples)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## 🎯 Overview
 
@@ -246,10 +245,6 @@ pytest
 flake8 data_scanner/
 black data_scanner/
 ```
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
