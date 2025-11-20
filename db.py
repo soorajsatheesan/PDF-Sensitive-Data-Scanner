@@ -1,8 +1,22 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import os
+from dotenv import load_dotenv
+import logging
 
-# Define the database URL from Render
-DATABASE_URL = "postgresql://doc_scanner_user:PpWhwvgx7FmNxTdJM0e6Sz4XLIilxlZS@dpg-ct0kti3tq21c73efqflg-a.oregon-postgres.render.com/doc_scanner"
+# Load environment variables
+load_dotenv()
+
+# Get database URL from environment variable
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError(
+        "DATABASE_URL environment variable is not set. "
+        "Please set it in your .env file or environment."
+    )
+
+logger = logging.getLogger(__name__)
 
 
 def get_db_connection():
@@ -13,7 +27,7 @@ def get_db_connection():
         connection = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
         return connection
     except psycopg2.Error as e:
-        print(f"Error connecting to the database: {e}")
+        logger.error(f"Error connecting to the database: {e}")
         raise
 
 
@@ -36,7 +50,7 @@ def initialize_database():
                 )
                 """
             )
-            print("Database and table initialized successfully.")
+            logger.info("Database and table initialized successfully.")
         connection.commit()
     finally:
         connection.close()

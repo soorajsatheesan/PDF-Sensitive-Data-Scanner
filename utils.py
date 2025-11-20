@@ -1,5 +1,8 @@
 from PyPDF2 import PdfReader
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Add your regex patterns for sensitive data here
 PATTERNS = {
@@ -27,7 +30,7 @@ def extract_text(file_path):
             text += page.extract_text() or ""
         return text
     except Exception as e:
-        print(f"Error extracting text: {e}")
+        logger.error(f"Error extracting text from {file_path}: {e}", exc_info=True)
         return ""
 
 
