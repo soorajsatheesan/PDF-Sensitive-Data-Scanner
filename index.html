@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Scanner</title>
+  </head>
+  <body>
+    <h1>Data Scanner</h1>
+    <input type="file" id="fileInput" accept=".pdf" />
+    <button id="uploadButton">Upload and Scan</button>
+    <div id="results"></div>
+
+    <script>
+      document
+        .getElementById("uploadButton")
+        .addEventListener("click", async (event) => {
+          event.preventDefault(); // Prevent page reload
+          const fileInput = document.getElementById("fileInput");
+          const resultsDiv = document.getElementById("results");
+
+          resultsDiv.innerHTML = ""; // Clear previous results
+
+          // Check if a file is selected
+          if (!fileInput.files.length) {
+            resultsDiv.innerHTML =
+              '<p style="color: red;">No file selected!</p>';
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", fileInput.files[0]);
+
+          // Display loading message
+          resultsDiv.innerHTML = "<p>Processing your file...</p>";
+
+          try {
+            // Send the file to the backend
+            const response = await fetch("http://127.0.0.1:5000/upload", {
+              method: "POST",
+              body: formData,
+            });
+
+            if (response.ok) {
+              // Parse and display results
+              const data = await response.json();
+              displayResults(data.results);
+            } else {
+              const error = await response.json();
+              resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.error}</p>`;
+            }
+          } catch (err) {
+            resultsDiv.innerHTML = `<p style="color: red;">An error occurred: ${err.message}</p>`;
+          }
+        });
+
+      // Display results from the backend
+      function displayResults(results) {
+        const resultsDiv = document.getElementById("results");
+        if (results.length === 0) {
+          resultsDiv.innerHTML = "<p>No sensitive data found in the file.</p>";
+          return;
+        }
+
+        resultsDiv.innerHTML = "<h2>Scan Results:</h2>";
+        results.forEach((result) => {
+          resultsDiv.innerHTML += `
+                    <div>
+                        <p><strong>Type:</strong> ${result.type}</p>
+                        <p><strong>Value:</strong> ${result.value}</p>
+                        <p><strong>Classification:</strong> ${result.classification}</p>
+                    </div>
+                `;
+        });
+      }
+    </script>
+  </body>
+</html>
