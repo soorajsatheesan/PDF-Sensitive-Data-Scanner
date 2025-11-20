@@ -235,13 +235,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📝 License
 
 This project is licensed under the MIT License.
-
-## 🙏 Acknowledgments
-
-- Built with ❤️ using Python and Flask
-- Inspired by the need for better data privacy and compliance tools
-- Special thanks to the open-source community
-
-<div align="center">
-  <b>⭐ Star this repository if you find it helpful!</b>
-</div>
